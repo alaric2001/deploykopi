@@ -50,7 +50,8 @@ class RegisteredUserController extends Controller
             // create a new file name
             $new_name = $request->name.'_'.time().'.'.$extension;
             // move file to public/images/new and use $new_name
-            $image->move(public_path('images'), $new_name);
+            // $image->move(public_path('images'), $new_name);
+            $image->storeAs('images', $new_name, 'public');
     
             $user = User::create([
                 'name_user' => $request->name,
