@@ -1,0 +1,19 @@
+{
+    "name": "Seteguk Kopi App",
+    "short_name": "Seteguk Kopi",
+    "start_url": "/",
+    "background_color": "#6777ef",
+    "description": "Seteguk Kopi PWA Web",
+    
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "#6777ef",
+    "icons": [
+        {
+            "src": "images/logo1.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

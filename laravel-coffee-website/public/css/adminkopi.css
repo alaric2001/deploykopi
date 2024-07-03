@@ -1,0 +1,26 @@
+.dropdown-content a:hover {
+    background-color: #3490dc; /* Warna latar belakang saat dihover */
+    color: #FFF; /* Warna teks saat dihover */
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 4px;
+  }
+
+th{
+    text-align: center;
+}
+
+.admin-container{
+    margin: 30px;
+    display: flex; 
+    flex-direction: column; 
+    gap: 1rem; 
+}
