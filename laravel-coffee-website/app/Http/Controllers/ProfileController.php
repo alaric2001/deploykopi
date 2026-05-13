@@ -34,8 +34,24 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+        // $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function editemailnama(Request $request)
+    {
+        $user = User::findOrFail(Auth::id());
+        // dd($user);
+        // Update name_user and email
+        $user->name_user = $request->input('namauser');
+        $user->email = $request->input('email');
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+        $user->save();
+        return redirect()->back();
     }
 
     public function edit_pp(Request $request)

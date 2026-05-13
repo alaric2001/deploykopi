@@ -16,7 +16,7 @@ class RasaKopiController extends Controller
     {
         $rasakopi = RasaKopi::all();
         $kopi = Kopi::all();
-        return view('admin.rasakopi.list_rasa', compact('rasakopi', 'kopi'));
+        return view('admin.jenis_kopi', compact('rasakopi', 'kopi'));
     }
 
     public function add(Request $request)

@@ -16,4 +16,9 @@ class Transaksi extends Model
     {
         return $this->hasMany(Cart::class);
     }
+
+    public function alamat()
+    {
+        return $this->belongsTo(Alamat::class, 'id_alamat');
+    }
 }

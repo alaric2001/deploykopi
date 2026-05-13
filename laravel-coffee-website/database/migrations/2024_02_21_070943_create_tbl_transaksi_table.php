@@ -16,12 +16,15 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unsignedBigInteger('id_alamat')->nullable();
+            $table->foreign('id_alamat')->references('id')->on('tbl_alamat')->onDelete('cascade');
             
             $table->bigInteger('total_price')->nullable();
             
             $table->string('bukti_payment')->nullable();
-            $table->enum('dine_in', ['yes', 'no'])->nullable();
-            $table->integer('no_meja')->nullable();
+            $table->enum('delivery', ['yes', 'no'])->default('no')->nullable();
+            // $table->integer('no_meja')->nullable();
             
             $table->enum('order_telah_diantar', ['Belum diantar', 'Sudah diantar'])->default('Belum Diantar')->nullable();
             

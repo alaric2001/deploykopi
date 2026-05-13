@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_rasa_kopi', function (Blueprint $table) {
-            $table->id();
+        // Schema::create('tbl_rasa_kopi', function (Blueprint $table) {
+        //     $table->id();
+        //     // // Foreign key ke tabel kopi
+        //     $table->unsignedBigInteger('kopi_id');
+        //     $table->foreign('kopi_id')->references('id')->on('tbl_kopi')->onDelete('cascade');
+        //     $table->string('nama_rasa');
+        //     $table->timestamps();
 
-            // // Foreign key ke tabel kopi
-            $table->unsignedBigInteger('kopi_id');
-            $table->foreign('kopi_id')->references('id')->on('tbl_kopi')->onDelete('cascade');
-
-            $table->string('nama_rasa');
-            // $table->integer('stock');
-            $table->timestamps();
-        });
+        //     // $table->integer('stock');
+        // });
     }
 
     /**

@@ -46,7 +46,7 @@
                             <div>
                                 <div class="flex gap-2">
                                     <a class="rounded-md text-white text-xs bg-yellow-500 p-2 px-4 open_modal_edit_payment" href="" 
-                                    data-id="{{ $item->id }}" data-nama="{{ $item->jenis }}" 
+                                    data-id="{{ $item->id }}" data-nama="{{ $item->nama }}" 
                                     data-an="{{ $item->atas_nama }}" data-no='{{ $item->nomor }}'
                                     data-foto='{{ $item->foto }}' data-jenis="{{ $item->jenis }}">
                                         Edit
@@ -86,7 +86,7 @@
                 @csrf
                 <div class="mb-4">
                     <label for="jenis_payment" class="block text-sm font-medium text-gray-700">Jenis Payment</label>
-                    <select class="mt-1 w-full text-sm font-mediumshadow-sm sm:text-sm border-gray-300 rounded-md" name="jenis_payment" id="pilih_jenis" onchange="toggleTableInput()" required>
+                    <select class="mt-1 w-full text-sm font-mediumshadow-sm sm:text-sm border-gray-300 rounded-md" name="jenis_payment" id="pilih_jenis_kopi" onchange="TombolPilihJenis()" required>
                         <option value="" disabled selected hidden>Pilih Jenis</option>
                         <option value="Bank">Bank</option>
                         <option value="E-Wallet">E-Wallet</option>
@@ -104,12 +104,12 @@
                     <input required type="text" name="atas_nama" id="atas_nama" class="mt-1 focus:ring-secondary focus:border-secondary w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                 </div>
 
-                <div class="mb-4 hidden" id='input_nomor'>
+                <div id='input_nomor' class="mb-4 hidden">
                     <label for="nomor" class="block text-sm font-medium text-gray-700">Nomor Rekening/HP</label>
                     <input type="number" name="nomor" id="create_nomor" class="mt-1 focus:ring-secondary focus:border-secondary w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                 </div>
 
-                <div id="input_qris" class="mb-4 hidden">
+                <div id="qris_input" class="mb-4 hidden">
                     <label for="foto_qris" class="block text-sm font-medium text-gray-700">Foto Qris</label>
                     <input type="file" name="foto_qris" id="input_foto_qris" class="mt-1 p-1 focus:ring-secondary focus:border-secondary w-full shadow-sm sm:text-sm border border-gray-300 rounded-md">
                 </div>
@@ -164,7 +164,7 @@
 
                 <div id='input_edit_nomor' class="mb-4 hidden">
                     <label for="nomor" class="block text-sm font-medium text-gray-700">Nomor Rekening/HP</label>
-                    <input type="text" name="nomor" id="edit_nomor" class="mt-1 focus:ring-secondary focus:border-secondary w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    <input type="number" name="nomor" id="edit_nomor" class="mt-1 focus:ring-secondary focus:border-secondary w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                 </div>
 
                 <div id="input_edit_qris" class="mb-4 hidden">
@@ -240,27 +240,30 @@
         }
     </script>
 
+    <script>
+        function TombolPilihJenis() {
+                var pilih_jenis = document.getElementById("pilih_jenis_kopi");
+                var input_qris = document.getElementById("qris_input");
+                
+                if (pilih_jenis.value == "Qris") {
+                    input_qris.classList.remove('hidden');
+                    document.getElementById("input_nomor").classList.add('hidden');
+                    document.getElementById("input_foto_qris").required = true;
+                    document.getElementById("create_nomor").required = false;
+                    // input_qris.classList.add('flex', 'flex-row', 'items-center', 'gap-2');
+                } 
+                else {
+                    input_qris.classList.add('hidden');
+                    document.getElementById("input_nomor").classList.remove('hidden');
+                    document.getElementById("input_foto_qris").required = false;
+                    document.getElementById("create_nomor").required = true;
+                    // input_qris.classList.remove('flex', 'flex-row', 'items-center', 'gap-2');
+                }
+            }
+    </script>
 {{-- Buka form untuk input qris atau no rek/hp --}}
     <script>
-        function toggleTableInput() {
-            var pilih_jenis = document.getElementById("pilih_jenis");
-            var input_qris = document.getElementById("input_qris");
-            
-            if (pilih_jenis.value === "Qris") {
-                input_qris.classList.remove('hidden');
-                document.getElementById("input_foto_qris").required = true;
-                document.getElementById("input_nomor").classList.add('hidden');
-                document.getElementById("create_nomor").required = false;
-                // input_qris.classList.add('flex', 'flex-row', 'items-center', 'gap-2');
-            } 
-            else {
-                input_qris.classList.add('hidden');
-                document.getElementById("input_foto_qris").required = false;
-                document.getElementById("input_nomor").classList.remove('hidden');
-                document.getElementById("create_nomor").required = true;
-                // input_qris.classList.remove('flex', 'flex-row', 'items-center', 'gap-2');
-            }
-        }
+        
 
         function toggleTableInput() {
             var edit_jenis = document.getElementById("edit_jenis");

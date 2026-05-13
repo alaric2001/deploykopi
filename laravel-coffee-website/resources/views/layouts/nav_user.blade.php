@@ -1,8 +1,8 @@
-<nav class="">
+<nav class="fixed w-full z-[9999] shadow-[0_4px_6px_rgba(0,0,0,0.1)] top-0">
     <div class="p-2 flex justify-between items-center">
-        <a href="/" class="flex items-center gap-3">
-            <img class="w-14 pl-2" src="{{ asset('images/logo_icon_black.png') }}" alt="logo seteguk kopi">
-            <p class="text-xl font-semibold">Seteguk Kopi</p>
+        <a href="/" class="flex items-center gap-2">
+            <img class="w-10" src="{{ asset('images/logo_icon_black.png') }}" alt="logo seteguk kopi">
+            <p class="text-lg font-semibold">Seteguk Kopi</p>
         </a>
         <div class="flex items-center gap-2">
             @guest
@@ -21,7 +21,7 @@
                         {{-- <p id="cartCount">{{ $cartCount }}</p> --}}
                     </div>
                 </a>
-                <div class="bg-[#00000050] w-0.5 h-6 mx-3"></div>
+                <div class="bg-[#00000050] w-0.5 h-6 mx-1"></div>
                 <a href="/profile" class="flex items-center gap-2 sm:hidden">
                     <img class="h-9 w-9 object-cover rounded-[50%]" src="{{ asset('images/'. Auth::user()->user_foto) }}" alt="">
                     {{-- <p class="hidden sm:block">Hello, {{ Auth::user()->name_user }}</p> --}}
@@ -35,8 +35,9 @@
                             <p class="hidden sm:block">Hello, {{ Auth::user()->name_user }}</p>
                         </div>
                     </button>
-                    <div class="dropdown-content">
+                    <div class="text-sm dropdown-content">
                         <a href="/profile">Profile</a>
+                        {{-- <a class="" href="/history-pembelian">Histori Pembelian</a> --}}
                         <form method="POST" action="{{ route('logout') }}" class="py-1 px-4 hover:bg-[#ddd]">
                             @csrf
                             <button type="submit" class="w-full py-2 rounded-md flex justify-start">Logout</button>
@@ -49,26 +50,28 @@
     
 </nav>
 
-<script>
-    $(document).ready(function(){
-        $.ajax({
-            url: "/cart/count",
-            type: "GET",
-            dataType: "json",
-            success: function(response){
-                if(response.cartCount > 0) {
-                    $('#cart_number').removeClass('hidden').addClass(
-                        'flex items-center justify-center text-[8px] h-4 font-semibold text-white w-[16px] bg-red-500 rounded-[100px]'
-                    ).text(response.cartCount);
-                } 
-                // else {
-                //     $('#undelivered-count').addClass('hidden');
-                // }
-            },
-            error: function(xhr, status, error){
-                console.error(error);
-                $('#cart_number').text('Failed to fetch data.');
-            }
+@auth
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                url: "/cart/count",
+                type: "GET",
+                dataType: "json",
+                success: function(response){
+                    if(response.cartCount > 0) {
+                        $('#cart_number').removeClass('hidden').addClass(
+                            'flex items-center justify-center text-[8px] h-4 font-semibold text-white w-[16px] bg-red-500 rounded-[100px]'
+                        ).text(response.cartCount);
+                    } 
+                    // else {
+                    //     $('#undelivered-count').addClass('hidden');
+                    // }
+                },
+                error: function(xhr, status, error){
+                    // console.error(error);
+                    // $('#cart_number').text('Failed to fetch data.');
+                }
+            });
         });
-    });
-</script>
+    </script>
+@endauth

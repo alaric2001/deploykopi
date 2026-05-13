@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('tbl_city', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name_city');
-        //     $table->unsignedBigInteger('id_province');
-        //     $table->foreign('id_province')->references('id')->on('tbl_province')->onDelete('cascade');
-        //     $table->string('type');
-        //     $table->string('postal_code');
-        //     $table->integer('id_city_auto');
-        //     $table->timestamps();
-        // });
+        Schema::create('tbl_alamat', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->string('kab_kota');
+            $table->string('kec');
+            $table->string('kel');
+            $table->BigInteger('kodepos');
+            $table->text('detail')->nullable();
+            $table->integer('harga_ongkir')->default(0)->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

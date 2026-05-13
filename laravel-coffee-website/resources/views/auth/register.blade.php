@@ -81,10 +81,10 @@
             @endif
         </div>
 
-        <div class="mt-4">
+        {{-- <div class="mt-4">
             <label for='alamat' class="block font-medium text-sm text-gray-700  ">Alamat</label>
             <textarea name="alamat" id="" cols="30" rows="" required class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"></textarea>
-        </div>
+        </div> --}}
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">

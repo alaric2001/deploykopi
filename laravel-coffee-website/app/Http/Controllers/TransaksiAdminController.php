@@ -15,7 +15,10 @@ class TransaksiAdminController extends Controller
     {
         $transaksi_data = Transaksi::all();
         return view('admin.order.index', ['transaksi_data' => $transaksi_data]);
-
+        // $transaksi_data->each(function($item) {
+        //     $item->created_at = Carbon::parse($item->created_at)->format('d M Y');
+        // });
+        // dd($transaksi_data);
         // if(request()->expectsJson()) {
         //     return response()->json(['transaksi_data' => $transaksi_data]);
         // }
@@ -24,25 +27,13 @@ class TransaksiAdminController extends Controller
         // Mengembalikan data dalam format JSON
     }
 
-    public function data_order_admin(){
-
-        // $transaksi_data = Transaksi::all()->map(function ($transaksi) {
-        //     $transaksi->created_at = $transaksi->created_at->format('Y-m-d'); // Memformat tanggal menjadi hanya tanggal
-        //     return $transaksi;
-        // });
-    
-        // return response()->json(['transaksi_data' => $transaksi_data]);
-
-        // $transaksi_data = Transaksi::all();
-        $transaksi_data = Transaksi::orderBy('created_at', 'desc')->get();
+    public function data_order_admin(Request $request){
+        // $filter = $request->input('filter');
+        $transaksi_data = Transaksi::orderByRaw("bukti_payment IS NOT NULL DESC")
+        ->orderByRaw("FIELD(order_telah_diantar, 'Belum diantar') DESC")
+        ->orderBy('updated_at', 'desc')->get();
+        
         return response()->json(['transaksi_data' => $transaksi_data]);
-
-        //     $transaksi_data = Transaksi::orderByRaw("
-    //     CASE 
-    //         WHEN bukti_payment IS NOT NULL AND order_telah_diantar = 'Belum diantar' THEN 1
-    //         ELSE 2
-    //     END
-    // ")->get();
     }
 
     public function detail($id)

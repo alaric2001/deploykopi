@@ -16,7 +16,7 @@ const filesToCache = [
 
 const checkResponse = function (request) {
     return new Promise(function (fulfill, reject) {
-        fetch(request).then(function (response) {
+        fetch(request.clone()).then(function (response) {
             if (response.status !== 404) {
                 fulfill(response);
             } else {
@@ -27,11 +27,19 @@ const checkResponse = function (request) {
 };
 
 const addToCache = function (request) {
-    return caches.open("offline").then(function (cache) {
-        return fetch(request).then(function (response) {
-            return cache.put(request, response);
+    // Only cache GET requests
+    if (request.method === 'GET') {
+        return caches.open("offline").then(function (cache) {
+            return fetch(request.clone()).then(function (response) {
+                // Only add to cache if the request is successful
+                if (response.ok) {
+                    return cache.put(request, response.clone());
+                }
+            });
         });
-    });
+    }
+    // Return a promise that resolves immediately for non-GET requests
+    return Promise.resolve();
 };
 
 const returnFromCache = function (request) {
@@ -50,7 +58,8 @@ self.addEventListener("fetch", function (event) {
     event.respondWith(checkResponse(event.request).catch(function () {
         return returnFromCache(event.request);
     }));
-    if(!event.request.url.startsWith('http')){
+
+    if (event.request.url.startsWith('http')) {
         event.waitUntil(addToCache(event.request));
     }
 });

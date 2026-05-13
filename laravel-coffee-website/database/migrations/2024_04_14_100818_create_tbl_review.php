@@ -26,6 +26,12 @@ return new class extends Migration
         //     $table->string('deskripsi');
         //     $table->timestamps();
         // });
+        Schema::create('tbl_raw_jenis_kopi', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->integer('stok')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -33,6 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_review');
+        // Schema::dropIfExists('tbl_review');
+        Schema::dropIfExists('tbl_raw_jenis_kopi');
     }
 };

@@ -18,9 +18,10 @@ class CartSeeder extends Seeder
 
         for ($i = 0; $i < 30; $i++) {
             Cart::create([
-                'id_user' => rand(1, 3), // Sesuaikan dengan jumlah data users yang ada
-                'kopi_id' => $faker->numberBetween(1, 6), // Sesuaikan dengan jumlah data kopi yang ada
-                'transaksi_id' => rand(1, 20), // Sesuaikan dengan jumlah data transaksi yang ada
+                'id_user' => rand(1, 4), // Sesuaikan dengan jumlah data users yang ada
+                'kopi_id' => $faker->numberBetween(1, 5), // Sesuaikan dengan jumlah data kopi yang ada
+                'transaksi_id' => rand(1, 30), // Sesuaikan dengan jumlah data transaksi yang ada
+                'jenis_kopi_id' => rand(1, 2),
                 'quantity' => $faker->numberBetween(1, 5),
                 'jumlah' => $faker->numberBetween(10000, 20000),
                 'created_at' => $faker->dateTimeThisMonth(),

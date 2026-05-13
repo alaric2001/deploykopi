@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Kopi; // Import model Kopi
-use App\Models\RasaKopi; 
+// use App\Models\RasaKopi;
+use App\Models\JenisKopi;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +20,8 @@ class CartController extends Controller
         // $cartCount = Cart::where('id_user', auth()->id())->count();
         // $cartCount = Cart::where('id_user', auth()->id())->whereNull('transaksi_id')->count();
         $tidakada_bukti_payment = Transaksi::where('id_user', auth()->id())->whereNull('bukti_payment')->first();
-        $cart_data = Cart::where('id_user', Auth::id())->whereNull('transaksi_id')->with('kopi', 'rasakopi')->get();
-        // dd($existingCart);
+        $cart_data = Cart::where('id_user', Auth::id())->whereNull('transaksi_id')->with('kopi', 'jeniskopi')->get();
+        // $cart_data = Cart::where('id_user', Auth::id())->whereNull('transaksi_id')->with('kopi', 'rasakopi')->get();
         return view('user.cart', compact('cart_data', 'tidakada_bukti_payment'));
     }
 
@@ -44,13 +45,12 @@ class CartController extends Controller
             // $quantity = $request->quantity ?? 1;
             // $total = $quantity * $kopi->harga;
 
-            // Buat atau perbarui keranjang belanja pengguna
-            // dd($request->rasakopi);
-            // dd($request->total);
+            // Buat keranjang belanja pengguna
             Cart::create([
                 'id_user' => Auth::id(),
                 'kopi_id' => $request->kopi_id,
-                'rasa_kopi_id' => $request->rasakopi,
+                // 'rasa_kopi_id' => $request->rasakopi,
+                'jenis_kopi_id' => $request->jeniskopi,
                 'quantity' => $request->quantity,
                 'jumlah' => $request->total,
             ]);
@@ -65,16 +65,10 @@ class CartController extends Controller
 
     public function getCartCount()
     {
-        // if(Auth::id()){
-            // $count = Cart::where('id_user', auth()->id())->count();
-            $cartCount = Cart::where('id_user', auth()->id())->whereNull('transaksi_id')->count();
-            \Log::info('Undelivered count: ' . $cartCount);
-            // dd($cartCount );
-            return response()->json(['cartCount' => $cartCount]);
-        // }
-        // else
-        // $cartCount = Cart::where('id_user', auth()->id())->count();
-        // return view('layouts.nav_user', ['cartCount' => $cartCount]);
+        $cartCount = Cart::where('id_user', auth()->id())->whereNull('transaksi_id')->count();
+        \Log::info('Undelivered count: ' . $cartCount);
+        // dd($cartCount );
+        return response()->json(['cartCount' => $cartCount]);
     }
 
     public function destroy($id)

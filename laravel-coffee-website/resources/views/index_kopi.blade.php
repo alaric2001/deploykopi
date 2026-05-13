@@ -13,24 +13,61 @@
 @extends('layouts.user')
 @section('judul', 'Home')
 @section('content')
-    <center>
-        <p class="text-2xl font-bold my-4">Seteguk Kopi</p>
-    </center>
-    
-    <div class="sm:flex justify-center">
-        <div class="grid-card mx-3 sm:mx-7 gap-4">
+    <div class="my-4 flex justify-center pt-[80px]">
+        <div class="grid-card mx-3 sm:mx-7 sm:w-[1100px] gap-4">
             @foreach ($kopi as $item)
-                <a class="card" href="/kopi/{{ $item->id }}">
-                    <img src="{{ asset('images/' . $item->foto) }}" class="card-img-kopi rounded-t-lg" alt="{{ $item->jenis_kopi }}">
-                    <div class="card-body m-2">
-                        <h3 class="card-title text-sm leading-5">{{ $item->jenis_kopi }}</h3>
-                        {{-- <p class="card-text" style="text-align: justify">{{ $item->deskripsi }}</p> --}}
-                        <b><p class="card-text text-sm">Rp {{ number_format($item->harga, 2) }}</p></b>
-                        <p class="card-text text-[10px]">Stok: {{ $item->stok }}</p>
-                        <!-- Tambahan informasi lainnya sesuai kebutuhan -->
+                @php
+                    $kopiid = $item->jeniskopi->first()->kopi_id ?? false; //cek apakah menu memili jenis kopi
+                    if ($kopiid) {
+                        $allReadyTwo = true;
+                        foreach ($item->jeniskopi as $jenis) { //Cek jenis kopi, apakah keduanya habis atau tidak?
+                            if ($jenis->ready != 2) { // 1 adalah ready, 2 tidak ready
+                                $allReadyTwo = false;
+                                break;
+                            }
+                        }
+                        
+                        $oneoftwo = $item->ingredient->contains(function($data) {
+                        return $data->available == 2;
+                        });
 
-                        <!-- Tombol untuk menuju detail jika diperlukan -->
-                        {{-- <a href="{{ route('', $item->id) }}" class="btn btn-primary">Lihat Detail</a> --}}
+                        $isOutOfStock = $item->stok < 1 || $allReadyTwo  || $oneoftwo;
+                    }
+                    else {
+                        $oneoftwo = $item->ingredient->contains(function($data) {
+                        return $data->available == 2;
+                        });
+                        $isOutOfStock = $item->stok < 1 || $oneoftwo;
+                    }
+                @endphp
+
+                <a class="card relative {{ $isOutOfStock ? 'pointer-events-none' : '' }}" href="/kopi/{{ $item->id }}">
+                    @if ($isOutOfStock)
+                        <div class="rounded-lg absolute inset-0 bg-secondary bg-opacity-60 flex items-center justify-center text-white font-bold">
+                            Stok Habis
+                        </div>
+                    @endif
+                    <img src="{{ asset('images/' . $item->foto) }}" class="{{ $isOutOfStock ? 'opacity-30' : '' }} card-img-kopi rounded-t-lg" alt="{{ $item->jenis_kopi }}">
+                    <div class="card-body m-2 {{ $isOutOfStock ? 'opacity-50' : '' }}">
+                        <div class="flex items-center gap-1">
+                            @if ($item->diskon > 0)
+                                <h3 class="card-title text-sm leading-5">{{ $item->jenis_kopi }}</h3>
+                                <p class="text-xs font-bold text-red-500">-{{ $item->diskon }}%</p>
+                            @else
+                                <h3 class="card-title text-sm leading-5">{{ $item->jenis_kopi }}</h3>
+                            @endif
+                        </div>
+                        
+                        @if($item->diskon > 0)
+                            <div class="flex items-center gap-1">
+                                <p class="card-text text-sm font-bold">
+                                    Rp. {{ number_format($item->harga * (1 - $item->diskon / 100), 0, ',', '.') }}
+                                </p>
+                                <s class="text-xs text-gray-400">Rp. {{ number_format($item->harga, 0, ',', '.') }}</s>
+                            </div>
+                        @else
+                            <p class="card-text text-sm font-bold"> Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
+                        @endif
                     </div>
                 </a>
             @endforeach

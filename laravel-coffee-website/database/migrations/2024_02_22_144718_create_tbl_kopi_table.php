@@ -13,18 +13,17 @@ return new class extends Migration
     {
         Schema::create('tbl_kopi', function (Blueprint $table) {
             $table->id();
-
-            // Foreign key ke tabel rasa kopi
-            // $table->unsignedBigInteger('rasa_id');
-            // $table->foreign('rasa_id')->references('id')->on('tbl_rasa_kopi')->onDelete('cascade');
-
             $table->string('jenis_kopi');
             $table->string('foto');
             $table->float('harga');
-            $table->integer('stok');
             $table->integer('diskon')->nullable();
-            $table->string('deskripsi');
+            $table->integer('harga_diskon')->nullable();
+            $table->string('deskripsi')->nullable();
+            $table->integer('stok')->nullable();
             $table->timestamps();
+            // Foreign key ke tabel rasa kopi
+            // $table->unsignedBigInteger('rasa_id');
+            // $table->foreign('rasa_id')->references('id')->on('tbl_rasa_kopi')->onDelete('cascade');
         });
     }
 

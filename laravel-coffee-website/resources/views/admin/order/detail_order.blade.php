@@ -3,24 +3,23 @@
 @section('admin-content')
 <div class="admin-container">
     <p class="text-2xl font-semibold">Customer Order</p>
-    <p class="text-lg font-bold">{{ $transaksi_detail->name }} Order Detail </p>
-    {{-- <div class="flex flex-col text-sm">
-        @if ($transaksi_detail->dine_in == 'no')
-            <p class="font-medium">Takeaway</p>
+    <div class="flex flex-col">
+        <p class="text-lg font-semibold pb-1">{{ $transaksi_detail->name }} Order Detail </p>
+        @if ($transaksi_detail->delivery == 'yes')
+            <div class="font-semibold flex flex-row gap-1 items-center">
+                Delivery Order<i class="material-icons text-secondary">motorcycle</i>
+            </div>
+            <div class="flex flex-row">
+                <p class="text-sm font-semibold">{{ $transaksi_detail->alamat->kel }}</p>
+                <p class="text-sm">, {{ $transaksi_detail->alamat->kec }}</p>
+                <p class="text-sm">, {{ $transaksi_detail->alamat->kodepos }}.</p>
+            </div>
+            <p class="text-xs">Detail Alamat : {{ $transaksi_detail->alamat->detail}}</p>
         @else
-            <div class="flex flex-row">
-                <p class="font-medium">Dine In</p>
-                <p class="ml-[29px] mr-2">:</p>
-                <p>{{ $transaksi_detail->dine_in }}</p>
-            </div>
-            <div class="flex flex-row">
-                <p class="font-medium">No. Table</p>
-                <p class="ml-[12px] mr-2">:</p>
-                <p>{{ $transaksi_detail->no_meja}}</p>
-            </div>
+            <p class="font-medium">Takeaway Order</p>
         @endif
         
-    </div> --}}
+    </div>
     
     <div class="">
         <table class="font-sans w-full">

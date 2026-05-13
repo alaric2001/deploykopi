@@ -12,18 +12,21 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    @vite('resources/css/app.css')
+    {{-- @vite('resources/css/app.css') --}}
+    @include('layouts.vitecode')
 
     <!-- PWA  -->
-    <meta name="theme-color" content="#6777ef"/>
+    {{-- <meta name="theme-color" content="#6777ef"/> --}}
+    {{-- <link rel="manifest" href="{{ asset('/manifest.json') }}"> --}}
     <link rel="apple-touch-icon" href="{{ asset('images/logo1.png') }}">
-    <link rel="manifest" crossorigin="use-credentials" href="{{ asset('/manifest.json') }}">
+    <link rel="manifest" crossorigin="use-credentials" href="{{ asset('/manifest.json?v=1.0.1') }}">
+    <meta name='theme-color' content="#3d372b">
 
 </head>
-<body>
+<body class="bg-[#ececec]">
     @include('layouts.nav_user')
     
-    <div>
+    <div class="">
         {{-- <h2>Layout User</h2> --}}
         @yield('content')
     </div>

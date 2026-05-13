@@ -15,7 +15,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth()->user()->role=='user')
+        if(Auth()->user()->role=='user' || Auth()->user()->role=='admin' || Auth()->user()->role=='pemilik')
         {
             return $next($request);
         }
