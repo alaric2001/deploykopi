@@ -4,11 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Tentang Proyek
 
-**DeployKopi** adalah aplikasi e-commerce kedai kopi dengan **dua codebase paralel**:
+**DeployKopi** adalah aplikasi e-commerce kedai kopi dengan **dua codebase paralel**.
+
+Struktur repo (`alaric2001/deploykopi`):
+```
+deploykopi/                        ← git root
+├── .github/workflows/deploy.yml   ← GitHub Actions (GitHub Pages)
+└── laravel-coffee-website/        ← subfolder utama
+    ├── CLAUDE.md
+    ├── static-site/               ← static frontend (deploy ke GitHub Pages)
+    └── ... (Laravel app)
+```
 
 | | Laravel App | Static Site |
 |---|---|---|
-| Lokasi | root repo | `static-site/` |
+| Lokasi | `laravel-coffee-website/` | `laravel-coffee-website/static-site/` |
 | Runtime | PHP + MySQL | Browser only |
 | Deploy | Server | GitHub Pages |
 | Auth | Session + Middleware | Mock via LocalStorage |
@@ -21,7 +31,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Perintah
 
 ```bash
-cd static-site
+cd laravel-coffee-website/static-site   # dari root repo deploykopi/
 npm install
 npm run dev      # http://localhost:5174/
 npm run build    # output ke dist/
@@ -30,11 +40,11 @@ npm run preview  # preview hasil build
 
 ### Deploy ke GitHub Pages
 
-Push ke branch `main` atau `dev-porto` — GitHub Actions (`.github/workflows/deploy.yml`) otomatis build dan deploy. Pastikan **Settings → Pages → Source: GitHub Actions** sudah diaktifkan di repo.
+Workflow ada di `deploykopi/.github/workflows/deploy.yml` — berjalan otomatis saat push ke `main` atau `dev-porto`. Pastikan **Settings → Pages → Source: GitHub Actions** sudah diaktifkan di repo `alaric2001/deploykopi`.
 
 URL hasil deploy: `https://alaric2001.github.io/deploykopi/`
 
-Env var `DEPLOY_BASE` di workflow mengontrol base path. Saat dev lokal, base otomatis `/`; saat build CI, base menjadi `/<nama-repo>/`.
+Workflow men-set `DEPLOY_BASE: /deploykopi/` saat build CI. Saat dev lokal, base otomatis `/`.
 
 ### Arsitektur Static Site
 
