@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: static-site
+        working-directory: laravel-coffee-website/static-site
     steps:
       - uses: actions/checkout@v4
 
@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: static-site/package-lock.json
+          cache-dependency-path: laravel-coffee-website/static-site/package-lock.json
 
       - name: Install
         run: npm install
@@ -44,7 +44,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: static-site/dist
+          path: laravel-coffee-website/static-site/dist
 
   deploy:
     needs: build
