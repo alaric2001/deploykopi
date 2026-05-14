@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alamat | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data="{
+      tambah: false,
+      form: { kec: '', kel: '', detail: '', harga_ongkir: 0, kodepos: '' },
+      get kelurahanList() {
+        const kec = $store.data.kecamatan.find(k => k.nama_kec === this.form.kec);
+        return kec?.kelurahan || [];
+      },
+      simpan() {
+        const baru = {
+          id: Date.now(),
+          id_user: $store.auth.user?.id || 0,
+          kab_kota: 'Kota Bekasi',
+          ...this.form
+        };
+        $store.data.alamat.push(baru);
+        this.form = { kec: '', kel: '', detail: '', harga_ongkir: 0, kodepos: '' };
+        this.tambah = false;
+        alert('Alamat ditambahkan (mock — tidak persisten di server, hanya sesi ini)');
+      }
+    }" x-init="mountNavUser()">
+    <div class="sm:w-[700px] w-full px-4 pb-10">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-semibold">Alamat</h1>
+        <button @click="tambah = !tambah" class="btn-primary text-sm" x-text="tambah ? 'Batal' : '+ Tambah'"></button>
+      </div>
+
+      <div x-show="tambah" x-cloak class="bg-white rounded-lg p-4 shadow mb-4">
+        <p class="font-semibold text-sm mb-2">Tambah Alamat</p>
+        <div class="flex flex-col gap-2">
+          <select x-model="form.kec" class="p-2 border rounded text-sm">
+            <option value="" disabled>Pilih Kecamatan</option>
+            <template x-for="k in $store.data.kecamatan" :key="k.id">
+              <option :value="k.nama_kec" x-text="k.nama_kec"></option>
+            </template>
+          </select>
+          <select x-model="form.kel" class="p-2 border rounded text-sm">
+            <option value="" disabled>Pilih Kelurahan</option>
+            <template x-for="kel in kelurahanList" :key="kel">
+              <option :value="kel" x-text="kel"></option>
+            </template>
+          </select>
+          <input x-model="form.kodepos" placeholder="Kode Pos" class="p-2 border rounded text-sm">
+          <input x-model.number="form.harga_ongkir" placeholder="Harga Ongkir" type="number" class="p-2 border rounded text-sm">
+          <textarea x-model="form.detail" placeholder="Detail alamat" class="p-2 border rounded text-sm"></textarea>
+          <button @click="simpan()" class="btn-primary">Simpan</button>
+        </div>
+      </div>
+
+      <template x-for="a in $store.data.alamat" :key="a.id">
+        <div class="bg-white rounded p-3 mb-2 shadow text-sm">
+          <p class="font-semibold" x-text="a.kel"></p>
+          <p class="text-xs" x-text="a.kec + ', ' + a.kab_kota + ' ' + a.kodepos"></p>
+          <p class="text-xs" x-text="a.detail"></p>
+          <p class="text-xs font-semibold mt-1"
+             x-text="a.harga_ongkir > 0 ? 'Ongkir: ' + formatRupiah(a.harga_ongkir) : 'Free Ongkir'"></p>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

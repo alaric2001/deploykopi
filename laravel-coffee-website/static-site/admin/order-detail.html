@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Order | Admin</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+  <main class="ml-[220px] p-6" x-data="{
+      get t() {
+        const id = qs('id');
+        return $store.history.findById(id) || $store.data.transaksiDemo.find(x => String(x.id) === String(id));
+      }
+    }" x-init="mountSidebarAdmin()">
+    <a :href="asset('admin/order.html')" class="text-xs text-secondary underline">← Kembali</a>
+    <template x-if="!t">
+      <p class="text-gray-500 mt-4">Order tidak ditemukan.</p>
+    </template>
+
+    <template x-if="t">
+      <div class="bg-white rounded-lg shadow p-4 mt-3 max-w-2xl">
+        <h1 class="text-xl font-bold mb-2">Order #<span x-text="t.id"></span></h1>
+        <p class="text-xs text-gray-500" x-text="formatTanggal(t.created_at)"></p>
+        <p class="text-sm mt-2">Pelanggan: <strong x-text="t.name"></strong></p>
+        <p class="text-sm">Metode: <strong x-text="t.delivery === 'yes' ? 'Delivery' : 'Takeaway'"></strong></p>
+        <p class="text-sm">Status:
+          <span class="px-2 py-0.5 rounded-full text-[10px]"
+            :class="t.order_telah_diantar === 'Sudah diantar' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
+            x-text="t.order_telah_diantar"></span>
+        </p>
+
+        <p class="font-semibold mt-4 mb-1 text-sm">Item</p>
+        <template x-for="it in t.items" :key="it.kopi_id + (it.jenis || '')">
+          <div class="border-b py-2 text-sm flex justify-between">
+            <div>
+              <p class="font-semibold" x-text="it.kopi_nama"></p>
+              <p class="text-xs" x-show="it.jenis" x-text="'Jenis - ' + it.jenis"></p>
+              <p class="text-xs" x-text="it.qty + ' × ' + formatRupiah(it.harga)"></p>
+            </div>
+            <p class="font-semibold" x-text="formatRupiah(it.subtotal)"></p>
+          </div>
+        </template>
+
+        <div class="flex justify-between mt-3 font-bold">
+          <span>Total</span><span x-text="formatRupiah(t.total_price)"></span>
+        </div>
+
+        <template x-if="t.bukti_payment">
+          <div class="mt-3">
+            <p class="text-xs font-semibold">Bukti Pembayaran</p>
+            <img :src="t.bukti_payment.startsWith('data:') ? t.bukti_payment : asset('images/bukti_bayar/' + t.bukti_payment)" class="max-w-[200px] mt-1 rounded border">
+          </div>
+        </template>
+
+        <button class="btn-primary mt-4" @click="alert('Mode static: tidak ada perubahan persisten')">Tandai Sudah Diantar</button>
+      </div>
+    </template>
+  </main>
+</body>
+</html>

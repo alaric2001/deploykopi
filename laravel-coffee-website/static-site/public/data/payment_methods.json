@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "jenis": "E-Wallet",
+    "nama": "Gopay",
+    "atas_nama": "Alaric Rasendriya Aniko",
+    "nomor": "081290482972",
+    "foto": null
+  },
+  {
+    "id": 2,
+    "jenis": "Qris",
+    "nama": "Qris",
+    "atas_nama": "Alaric",
+    "nomor": null,
+    "foto": "my qris.jpeg"
+  }
+]

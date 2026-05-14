@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stok Ingredient | Admin</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+  <main class="ml-[220px] p-6" x-data x-init="mountSidebarAdmin()">
+    <h1 class="text-2xl font-bold mb-4">Stok Bahan Baku</h1>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-primary text-left"><tr><th class="p-2">Nama</th><th class="p-2">Stok</th></tr></thead>
+        <tbody>
+          <template x-for="r in $store.data.rawIngredients" :key="r.id">
+            <tr class="border-t">
+              <td class="p-2" x-text="r.nama"></td>
+              <td class="p-2" :class="r.stok < 20 ? 'text-red-500 font-semibold' : ''" x-text="r.stok"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

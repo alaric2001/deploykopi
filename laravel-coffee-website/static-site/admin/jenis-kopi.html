@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jenis Kopi | Admin</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+  <main class="ml-[220px] p-6" x-data x-init="mountSidebarAdmin()">
+    <h1 class="text-2xl font-bold mb-4">Jenis Kopi (Varian per Menu)</h1>
+    <div class="bg-white rounded-lg shadow p-4">
+      <template x-for="kopi in $store.data.kopi.filter(k => k.jenis?.length > 0)" :key="kopi.id">
+        <div class="border-b py-2 flex items-center gap-3">
+          <img :src="asset('images/' + kopi.foto)" class="w-12 h-12 rounded object-cover">
+          <p class="font-semibold flex-1" x-text="kopi.jenis_kopi"></p>
+          <div class="flex gap-1">
+            <template x-for="j in kopi.jenis" :key="j.id">
+              <span class="text-xs px-2 py-1 rounded"
+                :class="j.ready === 1 ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500 line-through'"
+                x-text="j.nama"></span>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

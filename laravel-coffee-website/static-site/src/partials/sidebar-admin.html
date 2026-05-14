@@ -1,0 +1,31 @@
+<!-- Sidebar Admin/Pemilik (read-only mock) -->
+<aside class="w-[220px] h-screen bg-primary fixed top-0 left-0 overflow-y-auto" x-data>
+  <div class="flex items-center gap-2 p-2">
+    <img class="w-14 pl-2" :src="asset('images/logo_icon_black.png')" alt="logo">
+    <p class="text-xl font-bold" x-text="$store.auth.user ? $store.auth.user.role.toUpperCase() : 'GUEST'"></p>
+  </div>
+  <div class="h-px bg-black my-1 mx-2"></div>
+
+  <nav class="flex flex-col gap-1">
+    <template x-if="$store.auth.isPemilik">
+      <a class="sidebar-link" :href="asset('admin/dashboard.html')">Dashboard</a>
+    </template>
+    <a class="sidebar-link" :href="asset('admin/order.html')">Transaksi</a>
+    <a class="sidebar-link" :href="asset('admin/menu-kopi.html')">Menu Kopi</a>
+    <a class="sidebar-link" :href="asset('admin/jenis-kopi.html')">Jenis Kopi</a>
+    <a class="sidebar-link" :href="asset('admin/raw-jenis-kopi.html')">Stok Jenis Kopi</a>
+    <a class="sidebar-link" :href="asset('admin/ingredient.html')">Ingredient</a>
+    <a class="sidebar-link" :href="asset('admin/raw-ingredient.html')">Stok Ingredient</a>
+    <a class="sidebar-link" :href="asset('admin/payment-method.html')">Payment Method</a>
+    <template x-if="$store.auth.isPemilik">
+      <a class="sidebar-link" :href="asset('admin/users.html')">Users</a>
+    </template>
+
+    <button
+      class="m-2 btn-primary"
+      @click="$store.auth.logout(); location.href = asset('index.html')"
+    >
+      Logout
+    </button>
+  </nav>
+</aside>

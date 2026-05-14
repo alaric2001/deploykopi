@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#3d372b" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data x-init="mountNavUser()">
+    <div class="grid-card mx-3 sm:mx-7 sm:w-[1100px] gap-4">
+      <template x-for="item in $store.data.kopi" :key="item.id">
+        <a
+          class="card relative"
+          :class="isOutOfStock(item) ? 'pointer-events-none' : ''"
+          :href="asset('detail.html?id=' + item.id)"
+        >
+          <div
+            x-show="isOutOfStock(item)"
+            class="rounded-lg absolute inset-0 bg-secondary/60 flex items-center justify-center text-white font-bold z-10"
+          >Stok Habis</div>
+
+          <img
+            :src="asset('images/' + item.foto)"
+            :class="isOutOfStock(item) ? 'opacity-30' : ''"
+            class="card-img-kopi rounded-t-lg"
+            :alt="item.jenis_kopi"
+          />
+          <div class="card-body m-2" :class="isOutOfStock(item) ? 'opacity-50' : ''">
+            <div class="flex items-center gap-1">
+              <h3 class="text-sm leading-5 font-medium" x-text="item.jenis_kopi"></h3>
+              <p x-show="item.diskon > 0" class="text-xs font-bold text-red-500" x-text="'-' + item.diskon + '%'"></p>
+            </div>
+            <div class="flex items-center gap-1">
+              <p class="text-sm font-bold" x-text="formatRupiah(hargaFinal(item))"></p>
+              <s x-show="item.diskon > 0" class="text-xs text-gray-400" x-text="formatRupiah(item.harga)"></s>
+            </div>
+          </div>
+        </a>
+      </template>
+
+      <div x-show="!$store.data.loaded" class="col-span-full text-center text-gray-500 py-10">
+        Memuat menu…
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+
+  <main class="ml-[220px] p-6" x-data="{
+      get allOrders() {
+        return [...$store.data.transaksiDemo, ...$store.history.items];
+      },
+      get totalRevenue() {
+        return this.allOrders.reduce((s, t) => s + (t.total_price || 0), 0);
+      },
+      get totalOrder() { return this.allOrders.length; },
+      get totalUser() { return $store.data.users.filter(u => u.role === 'user').length; },
+
+      kopiTerjual() {
+        const map = {};
+        this.allOrders.forEach(t => {
+          (t.items || []).forEach(i => {
+            map[i.kopi_nama] = (map[i.kopi_nama] || 0) + i.qty;
+          });
+        });
+        return Object.entries(map)
+          .map(([nama, qty]) => ({ nama, qty }))
+          .sort((a, b) => b.qty - a.qty);
+      },
+
+      ordersPerHari() {
+        const map = {};
+        this.allOrders.forEach(t => {
+          const date = (t.created_at || '').substring(0, 10);
+          if (date) map[date] = (map[date] || 0) + 1;
+        });
+        return Object.entries(map)
+          .sort((a, b) => a[0].localeCompare(b[0]))
+          .map(([date, count]) => ({ date, count }));
+      },
+
+      renderChart() {
+        if (typeof Chart === 'undefined') return;
+
+        // Pie — kopi terjual
+        const pie = this.kopiTerjual();
+        if (pie.length) {
+          new Chart(this.$refs.pie.getContext('2d'), {
+            type: 'pie',
+            data: {
+              labels: pie.map(d => d.nama),
+              datasets: [{
+                data: pie.map(d => d.qty),
+                backgroundColor: ['#3d372b','#FFE5B6','#dcc69e','#a0876d','#6e604a','#c2a378','#e8d5a8','#8b7250','#5c4e36','#d4b889']
+              }]
+            }
+          });
+        }
+
+        // Line — order per hari
+        const daily = this.ordersPerHari();
+        if (daily.length) {
+          new Chart(this.$refs.line.getContext('2d'), {
+            type: 'line',
+            data: {
+              labels: daily.map(d => d.date),
+              datasets: [{
+                label: 'Jumlah Order',
+                data: daily.map(d => d.count),
+                borderColor: '#3d372b',
+                backgroundColor: 'rgba(61,55,43,0.1)',
+                tension: 0.3,
+                fill: true,
+                pointBackgroundColor: '#3d372b',
+                pointRadius: 5
+              }]
+            },
+            options: {
+              scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+          });
+        }
+
+        // Bar — stok jenis kopi
+        const jk = Alpine.store('data').rawJenisKopi;
+        if (jk.length) {
+          new Chart(this.$refs.barJenis.getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: jk.map(j => j.nama),
+              datasets: [{
+                label: 'Stok',
+                data: jk.map(j => j.stok),
+                backgroundColor: '#FFE5B6',
+                borderColor: '#3d372b',
+                borderWidth: 1
+              }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+          });
+        }
+
+        // Bar — stok ingredients
+        const ri = Alpine.store('data').rawIngredients;
+        if (ri.length) {
+          new Chart(this.$refs.barIng.getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: ri.map(i => i.nama),
+              datasets: [{
+                label: 'Stok',
+                data: ri.map(i => i.stok),
+                backgroundColor: '#dcc69e',
+                borderColor: '#3d372b',
+                borderWidth: 1
+              }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+          });
+        }
+      }
+    }" x-init="
+      mountSidebarAdmin();
+      $watch('$store.data.loaded', loaded => { if (loaded) renderChart(); });
+      if ($store.data.loaded) renderChart();
+    ">
+
+    <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+
+    <!-- Stat cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="text-xs text-gray-500">Total Pendapatan</p>
+        <p class="text-2xl font-bold text-secondary" x-text="formatRupiah(totalRevenue)"></p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="text-xs text-gray-500">Total Order</p>
+        <p class="text-2xl font-bold" x-text="totalOrder"></p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="text-xs text-gray-500">Total Pelanggan</p>
+        <p class="text-2xl font-bold" x-text="totalUser"></p>
+      </div>
+    </div>
+
+    <!-- Row 2: Pie + Line -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="font-semibold mb-2">Penjualan per Kopi</p>
+        <canvas x-ref="pie"></canvas>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="font-semibold mb-2">Order per Hari</p>
+        <canvas x-ref="line"></canvas>
+      </div>
+    </div>
+
+    <!-- Row 3: Bar stok jenis kopi + Bar stok ingredients -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="font-semibold mb-2">Stok Jenis Kopi</p>
+        <canvas x-ref="barJenis"></canvas>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow">
+        <p class="font-semibold mb-2">Stok Ingredients</p>
+        <canvas x-ref="barIng"></canvas>
+      </div>
+    </div>
+
+    <!-- Row 4: Stok menipis -->
+    <div class="bg-white p-4 rounded-lg shadow mt-4">
+      <p class="font-semibold mb-2">Stok Menipis</p>
+      <table class="w-full text-sm">
+        <thead class="text-left text-xs text-gray-500">
+          <tr><th>Nama</th><th>Stok</th></tr>
+        </thead>
+        <tbody>
+          <template x-for="i in [...$store.data.rawIngredients, ...$store.data.rawJenisKopi].sort((a,b) => a.stok - b.stok).slice(0, 8)" :key="i.nama">
+            <tr class="border-t">
+              <td class="py-1" x-text="i.nama"></td>
+              <td class="py-1" :class="i.stok < 20 ? 'text-red-500 font-semibold' : ''" x-text="i.stok"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

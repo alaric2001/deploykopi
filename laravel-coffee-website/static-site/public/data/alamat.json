@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "id_user": 3,
+    "kab_kota": "Kota Bekasi",
+    "kec": "Rawalumbu",
+    "kel": "Bojong Rawalumbu",
+    "harga_ongkir": 0,
+    "kodepos": "17116",
+    "detail": "RT.006/RW.038, Bojong Rawalumbu, Kec. Rawalumbu, Kota Bks, Jawa Barat 17116"
+  },
+  {
+    "id": 2,
+    "id_user": 3,
+    "kab_kota": "Kota Bekasi",
+    "kec": "Bekasi Barat",
+    "kel": "Bintara Jaya",
+    "harga_ongkir": 10000,
+    "kodepos": "17134",
+    "detail": "Komplek perumahan Bintara Jaya"
+  },
+  {
+    "id": 3,
+    "id_user": 3,
+    "kab_kota": "Kota Bekasi",
+    "kec": "Mustika Jaya",
+    "kel": "Cimuning",
+    "harga_ongkir": 5000,
+    "kodepos": "17158",
+    "detail": "Dekat Pasar Cimuning"
+  }
+]

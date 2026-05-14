@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Kopi | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center"
+    x-data="{
+      kopi: null,
+      jenisDipilih: null,
+      qty: 1,
+      jenisError: false,
+      get harga() { return this.kopi ? hargaFinal(this.kopi) : 0; },
+      get butuhPilihJenis() { return this.kopi?.jenis?.length > 0; },
+      inc() { if (this.kopi && this.qty < this.kopi.stok) this.qty++; },
+      dec() { if (this.qty > 1) this.qty--; },
+      pilihJenis(j) {
+        if (j.ready === 1) { this.jenisDipilih = j; this.jenisError = false; }
+      },
+      validasiOrder() {
+        if (this.butuhPilihJenis && !this.jenisDipilih) {
+          this.jenisError = true;
+          return false;
+        }
+        if (!$store.auth.isLoggedIn) {
+          alert('Silakan pilih peran (login) terlebih dahulu');
+          location.href = asset('login.html');
+          return false;
+        }
+        return true;
+      },
+      tambahKeCart() {
+        if (!this.validasiOrder()) return;
+        $store.cart.add({
+          kopi: this.kopi,
+          jenisId: this.jenisDipilih?.id || null,
+          jenisNama: this.jenisDipilih?.nama || null,
+          quantity: this.qty
+        });
+        alert('Berhasil ditambahkan ke keranjang');
+      },
+      orderLangsung() {
+        if (!this.validasiOrder()) return;
+        $store.cart.add({
+          kopi: this.kopi,
+          jenisId: this.jenisDipilih?.id || null,
+          jenisNama: this.jenisDipilih?.nama || null,
+          quantity: this.qty
+        });
+        location.href = asset('checkout.html');
+      }
+    }"
+    x-init="
+      mountNavUser();
+      $watch('$store.data.loaded', loaded => {
+        if (loaded) { kopi = $store.data.kopiById(qs('id')); }
+      });
+      if ($store.data.loaded) { kopi = $store.data.kopiById(qs('id')); }
+    ">
+
+    <div class="bg-white sm:w-[800px] w-full min-h-screen pb-24 sm:pb-6" x-show="kopi" x-cloak>
+
+      <!-- ===== MOBILE (sm:hidden) ===== -->
+      <div class="px-6 flex flex-col sm:hidden bg-white">
+        <img class="rounded-lg h-[300px] object-cover mt-3"
+             :src="asset('images/' + kopi?.foto)" :alt="kopi?.jenis_kopi">
+
+        <div class="flex items-center gap-2 pt-2">
+          <p class="text-md" x-text="kopi?.jenis_kopi"></p>
+          <p x-show="kopi?.diskon > 0" class="text-xs font-bold text-red-500"
+             x-text="'-' + kopi?.diskon + '%'"></p>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <p class="font-semibold text-xl" x-text="formatRupiah(harga)"></p>
+            <s x-show="kopi?.diskon > 0" class="text-xs text-gray-400"
+               x-text="formatRupiah(kopi?.harga)"></s>
+          </div>
+          <div class="flex items-center ml-4">
+            <button @click="dec()" class="bg-primary text-secondary text-sm font-medium px-[9px] py-1 rounded-3xl">-</button>
+            <input type="text" :value="qty" class="font-medium w-12 h-8 text-center border-none bg-transparent" readonly>
+            <button @click="inc()" class="bg-secondary text-primary text-sm font-medium px-[8px] py-1 rounded-3xl">+</button>
+          </div>
+        </div>
+
+        <div class="flex text-xs items-center gap-1 mt-2">
+          <p>Stok <span x-text="kopi?.stok"></span></p>
+        </div>
+
+        <template x-if="kopi?.jenis?.length > 0">
+          <div class="pt-4">
+            <p class="font-semibold mb-1">Jenis Kopi <span class="text-red-500">*</span></p>
+            <div>
+              <template x-for="j in kopi.jenis" :key="j.id">
+                <button type="button" @click="pilihJenis(j)" :disabled="j.ready !== 1"
+                  class="mr-1 mt-1 text-xs rounded-md p-2"
+                  :class="j.ready !== 1
+                    ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                    : (jenisDipilih?.id === j.id
+                        ? 'bg-secondary text-primary border border-secondary font-semibold'
+                        : 'bg-primary text-secondary hover:bg-primary_hover')"
+                  x-text="j.nama"></button>
+              </template>
+            </div>
+            <p x-show="jenisError" class="text-red-500 text-sm mt-1">Silakan pilih jenis kopi</p>
+          </div>
+        </template>
+
+        <p class="font-semibold pt-4">Ingredients</p>
+        <p class="text-sm" x-text="(kopi?.ingredients || []).map(i => i.nama).join(', ')"></p>
+
+        <p class="font-semibold pt-4">Deskripsi Produk</p>
+        <p class="text-sm" x-text="kopi?.deskripsi"></p>
+
+        <div class="my-1 h-[80px]"></div>
+      </div>
+
+      <!-- ===== DESKTOP (hidden sm:flex) ===== -->
+      <div class="hidden sm:flex flex-row gap-4 mx-4 mt-4">
+        <img class="rounded-lg h-[300px] w-[340px] object-cover"
+             :src="asset('images/' + kopi?.foto)" :alt="kopi?.jenis_kopi">
+
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <p class="text-2xl font-bold" x-text="kopi?.jenis_kopi"></p>
+            <p x-show="kopi?.diskon > 0" class="text-sm font-bold text-red-500"
+               x-text="'-' + kopi?.diskon + '%'"></p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-semibold text-xl" x-text="formatRupiah(harga)"></p>
+            <s x-show="kopi?.diskon > 0" class="text-xs text-gray-400"
+               x-text="formatRupiah(kopi?.harga)"></s>
+          </div>
+
+          <div class="flex items-center mt-4">
+            <button @click="dec()" class="bg-primary text-secondary text-sm font-medium px-[9px] py-1 rounded-3xl">-</button>
+            <input type="text" :value="qty" class="font-medium w-12 h-8 text-sm text-center border-none bg-transparent" readonly>
+            <button @click="inc()" class="bg-secondary text-primary text-sm font-medium px-[8px] py-1 rounded-3xl">+</button>
+          </div>
+
+          <div class="flex text-sm items-center gap-1 mt-2">
+            <p>Stok <span x-text="kopi?.stok"></span></p>
+          </div>
+
+          <template x-if="kopi?.jenis?.length > 0">
+            <div class="pt-4">
+              <p class="font-semibold mb-1">Jenis Kopi <span class="text-red-500">*</span></p>
+              <div>
+                <template x-for="j in kopi.jenis" :key="j.id">
+                  <button type="button" @click="pilihJenis(j)" :disabled="j.ready !== 1"
+                    class="mr-1 mt-1 text-xs rounded-md p-2"
+                    :class="j.ready !== 1
+                      ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                      : (jenisDipilih?.id === j.id
+                          ? 'bg-secondary text-primary border border-secondary font-semibold'
+                          : 'bg-primary text-secondary hover:bg-primary_hover')"
+                    x-text="j.nama"></button>
+                </template>
+              </div>
+              <p x-show="jenisError" class="text-red-500 text-sm mt-1">Silakan pilih jenis kopi</p>
+            </div>
+          </template>
+
+          <div class="flex justify-center gap-2 pt-6">
+            <button @click="orderLangsung()"
+              class="rounded-md px-8 py-2 bg-secondary border border-secondary text-primary hover:bg-secondary_hover text-sm">
+              Order
+            </button>
+            <button @click="tambahKeCart()"
+              class="rounded-md py-2 px-3 border bg-primary border-black text-black hover:bg-primary_hover text-sm">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ingredients & Deskripsi desktop -->
+      <p class="hidden sm:block mx-4 font-semibold pt-4">Ingredients</p>
+      <p class="hidden sm:block mx-4 text-sm"
+         x-text="(kopi?.ingredients || []).map(i => i.nama).join(', ')"></p>
+
+      <p class="hidden sm:block font-semibold pt-4 mx-4">Deskripsi Produk</p>
+      <p class="hidden sm:block text-sm mx-4 pb-6" x-text="kopi?.deskripsi"></p>
+    </div>
+
+    <!-- Sticky footer mobile only -->
+    <div class="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t px-6 py-3 flex gap-2"
+         x-show="kopi" x-cloak>
+      <button @click="tambahKeCart()" class="btn-secondary flex-1">+ Keranjang</button>
+      <button @click="orderLangsung()" class="btn-primary flex-1">Order Sekarang</button>
+    </div>
+
+    <div x-show="!kopi && $store.data.loaded" class="pt-10 text-center text-gray-500">
+      Produk tidak ditemukan.
+      <a :href="asset('index.html')" class="text-secondary underline ml-1">Kembali</a>
+    </div>
+  </main>
+</body>
+</html>

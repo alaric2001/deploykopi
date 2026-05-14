@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pilih Peran | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data="{
+      loading: false,
+      async loginAndRedirect(role) {
+        this.loading = true;
+        if (!$store.data.loaded) await Alpine.store('data').load();
+        $store.auth.loginAs(role);
+        location.href = asset(role === 'user' ? 'index.html' : 'admin/dashboard.html');
+      }
+    }" x-init="mountNavUser()">
+    <div class="bg-white rounded-lg shadow p-6 mt-10 max-w-md w-full mx-4">
+      <h1 class="text-xl font-semibold mb-2">Pilih Peran</h1>
+      <p class="text-xs text-gray-500 mb-4">
+        Aplikasi ini berjalan tanpa server. Pilih peran untuk mensimulasikan login.
+        Data tersimpan di LocalStorage browser ini.
+      </p>
+
+      <div class="flex flex-col gap-2" :class="loading ? 'opacity-60 pointer-events-none' : ''">
+        <button @click="loginAndRedirect('user')" class="btn-primary text-left p-3 flex items-center gap-2">
+          <span class="material-icons" x-text="loading ? 'hourglass_top' : 'shopping_basket'"></span>
+          <div>
+            <p class="font-semibold text-sm">User (Pelanggan)</p>
+            <p class="text-xs opacity-80">Bisa pesan, checkout, lihat riwayat</p>
+          </div>
+        </button>
+
+        <button @click="loginAndRedirect('admin')" class="btn-secondary text-left p-3 flex items-center gap-2">
+          <span class="material-icons">badge</span>
+          <div>
+            <p class="font-semibold text-sm">Admin (Pegawai)</p>
+            <p class="text-xs opacity-80">Akses panel manajemen produk & order (read-only)</p>
+          </div>
+        </button>
+
+        <button @click="loginAndRedirect('pemilik')" class="btn-secondary text-left p-3 flex items-center gap-2">
+          <span class="material-icons">store</span>
+          <div>
+            <p class="font-semibold text-sm">Pemilik</p>
+            <p class="text-xs opacity-80">Semua akses admin + dashboard analitik & user</p>
+          </div>
+        </button>
+      </div>
+
+      <template x-if="$store.auth.isLoggedIn">
+        <div class="mt-4 p-3 bg-primary rounded text-xs">
+          Sedang login sebagai: <strong x-text="$store.auth.user.name_user"></strong> (<span x-text="$store.auth.user.role"></span>)
+          <button @click="$store.auth.logout()" class="ml-2 underline">Keluar</button>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

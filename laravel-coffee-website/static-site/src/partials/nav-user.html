@@ -1,0 +1,41 @@
+<!-- Navbar User (di-inline manual ke setiap halaman atau di-load via fetch). -->
+<nav class="fixed w-full z-[9999] bg-white shadow top-0">
+  <div class="p-2 flex justify-between items-center max-w-6xl mx-auto">
+    <a :href="asset('index.html')" class="flex items-center gap-2">
+      <img class="w-10" :src="asset('images/logo_icon_black.png')" alt="logo">
+      <p class="text-lg font-semibold">Seteguk Kopi</p>
+    </a>
+    <div class="flex items-center gap-2" x-data>
+      <template x-if="!$store.auth.isLoggedIn">
+        <a :href="asset('login.html')" class="btn-primary">Pilih Peran</a>
+      </template>
+      <template x-if="$store.auth.isLoggedIn">
+        <div class="flex items-center gap-2">
+          <a :href="asset('cart.html')" class="relative flex items-center">
+            <span class="material-icons">shopping_cart</span>
+            <span
+              x-show="$store.cart.count > 0"
+              x-text="$store.cart.count"
+              class="absolute -top-1 -right-2 flex items-center justify-center text-[10px] h-4 font-semibold text-white min-w-[16px] bg-red-500 rounded-full px-1"
+            ></span>
+          </a>
+          <div class="bg-black/30 w-0.5 h-6 mx-1"></div>
+          <div class="dropdown">
+            <button class="flex items-center gap-2">
+              <img class="h-9 w-9 object-cover rounded-full" :src="asset('images/' + $store.auth.user.user_foto)" alt="">
+              <p class="hidden sm:block text-sm" x-text="'Hello, ' + $store.auth.user.name_user"></p>
+            </button>
+            <div class="dropdown-content text-sm">
+              <a :href="asset('profile.html')">Profile</a>
+              <a :href="asset('history.html')">Riwayat</a>
+              <template x-if="$store.auth.isAdmin">
+                <a :href="asset('admin/dashboard.html')">Panel Admin</a>
+              </template>
+              <button @click="$store.auth.logout(); location.href = asset('index.html')">Logout</button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</nav>

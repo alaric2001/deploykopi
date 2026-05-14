@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1001,
+    "id_user": 3,
+    "name": "Parel F",
+    "id_alamat": 1,
+    "total_price": 45000,
+    "bukti_payment": "1716714624.jpeg",
+    "order_telah_diantar": "Sudah diantar",
+    "delivery": "yes",
+    "created_at": "2026-04-12T10:24:00",
+    "items": [
+      { "kopi_id": 1, "kopi_nama": "Caramel", "jenis": "Arabica", "qty": 2, "harga": 15000, "subtotal": 30000 },
+      { "kopi_id": 7, "kopi_nama": "Matcha Latte", "jenis": null, "qty": 1, "harga": 12000, "subtotal": 12000 }
+    ]
+  },
+  {
+    "id": 1002,
+    "id_user": 4,
+    "name": "Paran H",
+    "id_alamat": 2,
+    "total_price": 32000,
+    "bukti_payment": "1719654937.jpg",
+    "order_telah_diantar": "Sudah diantar",
+    "delivery": "yes",
+    "created_at": "2026-04-18T14:10:00",
+    "items": [
+      { "kopi_id": 3, "kopi_nama": "Hazelnut", "jenis": "Robusta", "qty": 2, "harga": 15300, "subtotal": 30600 }
+    ]
+  },
+  {
+    "id": 1003,
+    "id_user": 5,
+    "name": "Bede",
+    "id_alamat": null,
+    "total_price": 27000,
+    "bukti_payment": "1719674403.jpg",
+    "order_telah_diantar": "Belum diantar",
+    "delivery": "no",
+    "created_at": "2026-05-02T09:05:00",
+    "items": [
+      { "kopi_id": 6, "kopi_nama": "Americano", "jenis": "Arabica", "qty": 1, "harga": 15000, "subtotal": 15000 },
+      { "kopi_id": 10, "kopi_nama": "Dark Choco", "jenis": null, "qty": 1, "harga": 13000, "subtotal": 13000 }
+    ]
+  },
+  {
+    "id": 1004,
+    "id_user": 6,
+    "name": "Angga",
+    "id_alamat": null,
+    "total_price": 24000,
+    "bukti_payment": "1722852604.jpg",
+    "order_telah_diantar": "Belum diantar",
+    "delivery": "no",
+    "created_at": "2026-05-08T16:42:00",
+    "items": [
+      { "kopi_id": 2, "kopi_nama": "Gula Aren", "jenis": "Arabica", "qty": 2, "harga": 6000, "subtotal": 12000 },
+      { "kopi_id": 9, "kopi_nama": "Red Velvet", "jenis": null, "qty": 1, "harga": 15000, "subtotal": 15000 }
+    ]
+  },
+  {
+    "id": 1005,
+    "id_user": 7,
+    "name": "Al-Aric",
+    "id_alamat": null,
+    "total_price": 51000,
+    "bukti_payment": "1722853414.jpg",
+    "order_telah_diantar": "Sudah diantar",
+    "delivery": "yes",
+    "created_at": "2026-05-11T11:20:00",
+    "items": [
+      { "kopi_id": 5, "kopi_nama": "Vanilla", "jenis": "Arabica", "qty": 3, "harga": 17000, "subtotal": 51000 }
+    ]
+  }
+]

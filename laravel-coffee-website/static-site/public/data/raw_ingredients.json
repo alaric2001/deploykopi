@@ -1,0 +1,12 @@
+[
+  { "id": 1, "nama": "Gula", "stok": 40 },
+  { "id": 2, "nama": "Susu", "stok": 17 },
+  { "id": 3, "nama": "Krimer", "stok": 25 },
+  { "id": 4, "nama": "Kopi", "stok": 50 },
+  { "id": 5, "nama": "Air Mineral", "stok": 30 },
+  { "id": 6, "nama": "Rasa Caramel", "stok": 44 },
+  { "id": 7, "nama": "Rasa Gula Aren", "stok": 11 },
+  { "id": 8, "nama": "Rasa Hazelnut", "stok": 19 },
+  { "id": 9, "nama": "Rasa Pandan", "stok": 37 },
+  { "id": 10, "nama": "Rasa Vanilla", "stok": 22 }
+]

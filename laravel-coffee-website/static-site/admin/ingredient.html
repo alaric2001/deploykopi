@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ingredient | Admin</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+  <main class="ml-[220px] p-6" x-data x-init="mountSidebarAdmin()">
+    <h1 class="text-2xl font-bold mb-4">Ingredient (Bahan per Menu)</h1>
+    <div class="bg-white rounded-lg shadow p-4">
+      <template x-for="k in $store.data.kopi" :key="k.id">
+        <div class="border-b py-2 flex items-center gap-3">
+          <img :src="asset('images/' + k.foto)" class="w-10 h-10 rounded object-cover">
+          <p class="font-semibold flex-1 text-sm" x-text="k.jenis_kopi"></p>
+          <div class="flex flex-wrap gap-1 justify-end">
+            <template x-for="ing in k.ingredients" :key="ing.nama">
+              <span class="text-xs px-2 py-0.5 rounded"
+                :class="ing.available === 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                x-text="ing.nama"></span>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

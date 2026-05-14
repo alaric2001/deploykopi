@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "nama_kec": "Bantar Gebang",
+    "kelurahan": ["Bantargebang", "Ciketing Udik", "Cikiwul", "Sumur Batu"]
+  },
+  {
+    "id": 2,
+    "nama_kec": "Bekasi Barat",
+    "kelurahan": ["Bintara", "Bintara Jaya", "Jakasampurna", "Kota Baru", "Kranji"]
+  },
+  {
+    "id": 3,
+    "nama_kec": "Bekasi Selatan",
+    "kelurahan": ["Jakamulya", "Jakasetia", "Kayuringin Jaya", "Marga Jaya", "Pekayon Jaya"]
+  },
+  {
+    "id": 4,
+    "nama_kec": "Bekasi Timur",
+    "kelurahan": ["Aren Jaya", "Bekasi Jaya", "Duren Jaya", "Margahayu"]
+  },
+  {
+    "id": 5,
+    "nama_kec": "Bekasi Utara",
+    "kelurahan": ["Harapan Baru", "Harapan Jaya", "Kaliabang Tengah", "Marga Mulya", "Perwira", "Teluk Pucung"]
+  },
+  {
+    "id": 6,
+    "nama_kec": "Jatiasih",
+    "kelurahan": ["Jatiasih", "Jatikramat", "Jatiluhur", "Jatimekar", "Jatirasa", "Jatisari"]
+  },
+  {
+    "id": 7,
+    "nama_kec": "Jatisampurna",
+    "kelurahan": ["Jatikarya", "Jatiraden", "Jatirangga", "Jatiranggon", "Jatisampurna"]
+  },
+  {
+    "id": 8,
+    "nama_kec": "Medan Satria",
+    "kelurahan": ["Pejuang", "Medan Satria", "Harapan Mulya", "Kali Baru"]
+  },
+  {
+    "id": 9,
+    "nama_kec": "Mustika Jaya",
+    "kelurahan": ["Cimuning", "Mustikajaya", "Mustikasari", "Pedurenan"]
+  },
+  {
+    "id": 10,
+    "nama_kec": "Pondok Gede",
+    "kelurahan": ["Jatibening", "Jatibening Baru", "Jaticempaka", "Jatimakmur", "Jatiwaringin"]
+  },
+  {
+    "id": 11,
+    "nama_kec": "Pondok Melati",
+    "kelurahan": ["Jatimelati", "Jatimurni", "Jatirahayu", "Jatiwarna"]
+  },
+  {
+    "id": 12,
+    "nama_kec": "Rawalumbu",
+    "kelurahan": ["Bojong Menteng", "Bojong Rawalumbu", "Pengasinan", "Sepanjang Jaya"]
+  }
+]

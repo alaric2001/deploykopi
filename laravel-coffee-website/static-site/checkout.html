@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data="{
+      delivery: '',
+      alamatId: null,
+      paymentJenis: '',
+      buktiBase64: null,
+      get ongkir() {
+        if (this.delivery !== 'yes' || !this.alamatId) return 0;
+        const a = $store.data.alamatById(this.alamatId);
+        return a?.harga_ongkir || 0;
+      },
+      get total() {
+        return $store.cart.total + this.ongkir;
+      },
+      get bisaKirim() {
+        return this.delivery && (this.delivery === 'no' || this.alamatId) && this.paymentJenis && this.buktiBase64;
+      },
+      onFile(e) {
+        const file = e.target.files[0];
+        if (!file) { this.buktiBase64 = null; return; }
+        if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
+          alert('Bukti bayar harus jpg/jpeg/png');
+          e.target.value = '';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const MAX = 600;
+            const ratio = Math.min(MAX / img.width, MAX / img.height, 1);
+            const canvas = document.createElement('canvas');
+            canvas.width  = Math.round(img.width  * ratio);
+            canvas.height = Math.round(img.height * ratio);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            this.buktiBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
+      kirim() {
+        if (!this.bisaKirim) {
+          alert('Lengkapi semua isian terlebih dahulu');
+          return;
+        }
+        if (!$store.auth.isLoggedIn) {
+          alert('Silakan pilih peran terlebih dahulu');
+          location.href = asset('login.html');
+          return;
+        }
+        const transaksi = {
+          id: Date.now(),
+          id_user: $store.auth.user.id,
+          name: $store.auth.user.name_user,
+          id_alamat: this.alamatId,
+          alamat_snapshot: this.alamatId ? $store.data.alamatById(this.alamatId) : null,
+          total_price: this.total,
+          ongkir: this.ongkir,
+          bukti_payment: this.buktiBase64,
+          payment_jenis: this.paymentJenis,
+          order_telah_diantar: 'Belum diantar',
+          delivery: this.delivery,
+          created_at: new Date().toISOString(),
+          items: $store.cart.items.map(i => ({
+            kopi_id: i.kopi_id,
+            kopi_nama: i.kopi_nama,
+            jenis: i.jenis_nama,
+            qty: i.quantity,
+            harga: i.harga,
+            subtotal: i.subtotal
+          }))
+        };
+        $store.history.add(transaksi);
+        $store.cart.clear();
+        alert('Pesanan dikirim! (mock — tidak ada server)');
+        location.href = asset('history-detail.html?id=' + transaksi.id);
+      }
+    }" x-init="mountNavUser()">
+    <div class="sm:w-[800px] w-full px-4 pb-10">
+      <h1 class="text-xl font-semibold mb-4">Checkout</h1>
+
+      <template x-if="$store.cart.items.length === 0">
+        <p class="text-gray-500">Keranjang kosong.
+          <a :href="asset('index.html')" class="text-secondary underline">Lihat menu</a>
+        </p>
+      </template>
+
+      <template x-if="$store.cart.items.length > 0">
+        <div>
+          <!-- Pengiriman -->
+          <div class="bg-white rounded-lg border border-[#D9D9D9] p-3 mb-4">
+            <p class="font-semibold flex items-center gap-1">
+              <span class="material-icons text-secondary text-base">person</span>
+              <span x-text="$store.auth.user?.name_user || 'Tamu'"></span>
+            </p>
+            <select x-model="delivery" class="p-1 text-xs rounded-md mt-2 w-full border">
+              <option value="" disabled>Delivery/Takeaway</option>
+              <option value="yes">Delivery</option>
+              <option value="no">Takeaway</option>
+            </select>
+
+            <div x-show="delivery === 'yes'" class="mt-3" x-cloak>
+              <p class="text-xs mb-1">Pilih Alamat Pengiriman</p>
+              <div class="flex flex-col gap-1">
+                <template x-for="a in $store.data.alamat" :key="a.id">
+                  <button
+                    type="button"
+                    @click="alamatId = a.id"
+                    class="text-left bg-white border rounded p-2 flex flex-col"
+                    :class="alamatId === a.id ? 'bg-slate-200 border-secondary' : 'border-[#D9D9D9]'"
+                  >
+                    <p class="text-sm font-semibold" x-text="a.kel"></p>
+                    <p class="text-sm" x-text="a.kec + ' ' + a.kodepos"></p>
+                    <p class="text-xs" x-text="a.detail"></p>
+                    <p class="text-xs font-semibold mt-1"
+                       x-text="a.harga_ongkir > 0 ? 'Ongkir: ' + formatRupiah(a.harga_ongkir) : 'Free Ongkir'"></p>
+                  </button>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pesanan -->
+          <p class="font-semibold flex items-center gap-1 text-sm">
+            <span class="material-icons text-secondary text-base">local_cafe</span> Pesanan
+          </p>
+          <template x-for="item in $store.cart.items" :key="item.id">
+            <div class="bg-white rounded-lg border border-[#D9D9D9] mb-2 p-3 flex gap-4">
+              <img class="w-16 h-16 rounded object-cover" :src="asset('images/' + item.foto)" alt="">
+              <div>
+                <p class="text-sm" x-text="item.kopi_nama"></p>
+                <p x-show="item.jenis_nama" class="text-xs text-secondary" x-text="'Jenis - ' + item.jenis_nama"></p>
+                <p class="text-xs font-bold" x-text="item.quantity + ' x ' + formatRupiah(item.harga)"></p>
+              </div>
+            </div>
+          </template>
+
+          <div class="bg-white border rounded-lg p-3 mb-4 flex justify-between text-xs">
+            <p class="font-semibold">Subtotal</p>
+            <p x-text="formatRupiah($store.cart.total)"></p>
+          </div>
+          <div class="bg-white border rounded-lg p-3 mb-4 flex justify-between text-xs">
+            <p class="font-semibold">Ongkir</p>
+            <p x-text="formatRupiah(ongkir)"></p>
+          </div>
+          <div class="bg-secondary text-primary rounded-lg p-3 mb-4 flex justify-between text-sm font-semibold">
+            <p>Total Harga</p>
+            <p x-text="formatRupiah(total)"></p>
+          </div>
+
+          <!-- Metode pembayaran -->
+          <p class="text-xs font-semibold">Pilih Metode Pembayaran</p>
+          <div class="flex flex-row gap-2 mt-1 mb-2">
+            <template x-for="p in $store.data.uniquePaymentJenis()" :key="p.id">
+              <button
+                type="button"
+                @click="paymentJenis = p.jenis"
+                class="text-xs rounded-md p-2 border"
+                :class="paymentJenis === p.jenis ? 'bg-secondary text-primary border-secondary' : 'bg-primary text-secondary border-primary_hover hover:bg-primary_hover'"
+                x-text="p.jenis"
+              ></button>
+            </template>
+          </div>
+
+          <template x-for="pm in $store.data.paymentMethods.filter(p => p.jenis === paymentJenis)" :key="pm.id">
+            <div class="bg-white border rounded-lg p-3 mb-3 text-xs">
+              <template x-if="pm.jenis === 'Qris'">
+                <div>
+                  <p class="font-semibold">QRIS</p>
+                  <p x-text="pm.atas_nama"></p>
+                  <img class="mt-2 max-w-[200px]" :src="asset('images/' + pm.foto)" alt="qris">
+                </div>
+              </template>
+              <template x-if="pm.jenis !== 'Qris'">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="font-semibold" x-text="pm.nama"></p>
+                    <p x-text="pm.atas_nama"></p>
+                  </div>
+                  <p x-text="pm.nomor"></p>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <!-- Bukti pembayaran -->
+          <label class="text-xs block">
+            <p class="font-semibold mb-1">Bukti Pembayaran</p>
+            <input type="file" accept="image/png,image/jpeg,image/jpg" @change="onFile" class="bg-white p-1 text-xs rounded-md border w-full">
+          </label>
+          <img x-show="buktiBase64" :src="buktiBase64" class="mt-2 max-w-[200px] rounded" alt="preview bukti">
+
+          <button @click="kirim()" :disabled="!bisaKirim" class="btn-primary mt-4 w-full disabled:opacity-50 disabled:cursor-not-allowed">
+            Kirim Bukti Pembayaran
+          </button>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

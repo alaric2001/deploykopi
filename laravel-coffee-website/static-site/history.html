@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riwayat Pembelian | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data x-init="mountNavUser()">
+    <div class="sm:w-[800px] w-full px-4 pb-10">
+      <h1 class="text-xl font-semibold mb-4">Riwayat Pembelian</h1>
+
+      <template x-if="$store.history.items.length === 0">
+        <p class="text-gray-500 text-center py-12">Belum ada transaksi. Mulai belanja di
+          <a :href="asset('index.html')" class="text-secondary underline">menu</a>.
+        </p>
+      </template>
+
+      <template x-for="t in $store.history.sorted" :key="t.id">
+        <a :href="asset('history-detail.html?id=' + t.id)" class="block bg-white rounded-lg p-3 mb-3 shadow hover:shadow-md">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs text-gray-500" x-text="'No. ' + t.id"></p>
+              <p class="text-sm font-semibold" x-text="formatTanggal(t.created_at)"></p>
+              <p class="text-xs"
+                 x-text="(t.items.length) + ' item · ' + (t.delivery === 'yes' ? 'Delivery' : 'Takeaway')"></p>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold text-sm" x-text="formatRupiah(t.total_price)"></p>
+              <span class="text-[10px] px-2 py-0.5 rounded-full"
+                :class="t.order_telah_diantar === 'Sudah diantar' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
+                x-text="t.order_telah_diantar"></span>
+            </div>
+          </div>
+        </a>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

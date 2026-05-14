@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data="{
+      form: { name_user: '', email: '', no_hp: '' },
+      init() {
+        if (!$store.auth.isLoggedIn) { location.href = asset('login.html'); return; }
+        const u = $store.auth.user;
+        this.form = { name_user: u.name_user, email: u.email, no_hp: u.no_hp };
+      },
+      simpan() {
+        $store.auth.updateProfile(this.form);
+        alert('Profile disimpan');
+      }
+    }" x-init="mountNavUser(); init()">
+    <div class="sm:w-[600px] w-full px-4 pb-10">
+      <h1 class="text-xl font-semibold mb-4">Profile</h1>
+
+      <template x-if="$store.auth.user">
+        <div class="bg-white rounded-lg p-4 shadow flex flex-col items-center">
+          <img class="w-24 h-24 rounded-full object-cover" :src="asset('images/' + $store.auth.user.user_foto)" alt="">
+          <p class="mt-2 text-xs text-gray-500" x-text="'Login sebagai: ' + $store.auth.user.role"></p>
+
+          <div class="w-full mt-4 flex flex-col gap-2">
+            <label class="text-xs">
+              Nama
+              <input x-model="form.name_user" class="block w-full p-2 border rounded text-sm" />
+            </label>
+            <label class="text-xs">
+              Email
+              <input x-model="form.email" type="email" class="block w-full p-2 border rounded text-sm" />
+            </label>
+            <label class="text-xs">
+              No HP
+              <input x-model="form.no_hp" class="block w-full p-2 border rounded text-sm" />
+            </label>
+            <div class="flex gap-2 mt-2">
+              <button @click="simpan()" class="btn-primary flex-1">Simpan</button>
+              <a :href="asset('alamat.html')" class="btn-secondary flex-1 text-center">Kelola Alamat</a>
+            </div>
+            <button @click="$store.auth.logout(); location.href = asset('index.html')" class="text-red-500 text-xs underline mt-2">Logout</button>
+          </div>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

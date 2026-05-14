@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Users | Admin</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+  <main class="ml-[220px] p-6" x-data x-init="mountSidebarAdmin()">
+    <h1 class="text-2xl font-bold mb-4">Daftar User</h1>
+
+    <div class="bg-white rounded-lg shadow overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-primary text-left">
+          <tr>
+            <th class="p-2">Foto</th>
+            <th class="p-2">Nama</th>
+            <th class="p-2">Email</th>
+            <th class="p-2">Role</th>
+            <th class="p-2">No HP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="u in $store.data.users" :key="u.id">
+            <tr class="border-t">
+              <td class="p-2"><img :src="asset('images/' + u.user_foto)" class="w-10 h-10 rounded-full object-cover"></td>
+              <td class="p-2" x-text="u.name_user"></td>
+              <td class="p-2" x-text="u.email"></td>
+              <td class="p-2">
+                <span class="px-2 py-0.5 rounded-full text-[10px]"
+                  :class="u.role === 'pemilik' ? 'bg-purple-100 text-purple-700' : (u.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700')"
+                  x-text="u.role"></span>
+              </td>
+              <td class="p-2" x-text="u.no_hp"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

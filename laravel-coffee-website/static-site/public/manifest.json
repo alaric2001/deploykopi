@@ -1,0 +1,39 @@
+{
+  "name": "Seteguk Kopi - DeployKopi",
+  "short_name": "Seteguk Kopi",
+  "start_url": "./index.html",
+  "scope": "./",
+  "background_color": "#3d372b",
+  "theme_color": "#3d372b",
+  "description": "Aplikasi static e-commerce kedai kopi (DeployKopi).",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "images/screenshot2.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #ececec;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Card katalog kopi (eks public/css/kopi.css) */
+  .grid-card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .grid-card {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-card {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  .card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .card-img-kopi {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  /* Dropdown nav (eks public/css/dropdown.css) */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 0.375rem;
+    z-index: 10000;
+    overflow: hidden;
+  }
+
+  .dropdown-content a,
+  .dropdown-content button {
+    display: block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #333;
+    width: 100%;
+    text-align: left;
+  }
+
+  .dropdown-content a:hover,
+  .dropdown-content button:hover {
+    background-color: #f1f1f1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* Admin sidebar (eks public/css/adminkopi.css) */
+  .sidebar-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    transition: background-color 0.15s;
+  }
+
+  .sidebar-link:hover,
+  .sidebar-link.active {
+    background-color: rgb(221 199 158);
+  }
+
+  /* Tombol primer/sekunder */
+  .btn-primary {
+    background-color: #3d372b;
+    color: #FFE5B6;
+    border: 1px solid #3d372b;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: background-color 0.15s;
+  }
+
+  .btn-primary:hover {
+    background-color: #25211a;
+  }
+
+  .btn-secondary {
+    background-color: white;
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: background-color 0.15s;
+  }
+
+  .btn-secondary:hover {
+    background-color: #dcc69e;
+  }
+}
+
+/* Sembunyikan elemen sebelum Alpine init (anti-flash) */
+[x-cloak] {
+  display: none !important;
+}

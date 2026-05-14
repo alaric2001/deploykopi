@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order | Admin</title>
+  <link rel="icon" type="image/png" href="/images/logo_icon_black.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#f3f3f3] min-h-screen">
+  <div id="sidebar-mount"></div>
+  <main class="ml-[220px] p-6" x-data="{
+      get orders() {
+        return [...$store.history.items, ...$store.data.transaksiDemo]
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      }
+    }" x-init="mountSidebarAdmin()">
+    <h1 class="text-2xl font-bold mb-4">Daftar Transaksi</h1>
+
+    <div class="bg-white rounded-lg shadow overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-primary text-left">
+          <tr>
+            <th class="p-2">No</th>
+            <th class="p-2">Tanggal</th>
+            <th class="p-2">Pelanggan</th>
+            <th class="p-2">Total</th>
+            <th class="p-2">Metode</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="t in orders" :key="t.id">
+            <tr class="border-t">
+              <td class="p-2" x-text="t.id"></td>
+              <td class="p-2" x-text="formatTanggal(t.created_at)"></td>
+              <td class="p-2" x-text="t.name"></td>
+              <td class="p-2" x-text="formatRupiah(t.total_price)"></td>
+              <td class="p-2" x-text="t.delivery === 'yes' ? 'Delivery' : 'Takeaway'"></td>
+              <td class="p-2">
+                <span class="text-[10px] px-2 py-0.5 rounded-full"
+                  :class="t.order_telah_diantar === 'Sudah diantar' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
+                  x-text="t.order_telah_diantar"></span>
+              </td>
+              <td class="p-2">
+                <a :href="asset('admin/order-detail.html?id=' + t.id)" class="text-xs text-secondary underline">Detail</a>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+      <p x-show="orders.length === 0" class="p-4 text-center text-gray-500">Belum ada transaksi.</p>
+    </div>
+  </main>
+</body>
+</html>

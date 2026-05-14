@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keranjang | Seteguk Kopi</title>
+  <link rel="icon" type="image/png" href="/images/logo1.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script type="module" src="/src/js/main.js"></script>
+</head>
+<body class="bg-[#ececec] min-h-screen">
+  <div id="nav-mount"></div>
+
+  <main class="pt-[80px] flex justify-center" x-data x-init="mountNavUser()">
+    <div class="flex flex-col items-center sm:w-[800px] w-full px-4 pb-20">
+      <h1 class="text-xl font-semibold w-full mb-4">Keranjang</h1>
+
+      <template x-if="$store.cart.items.length === 0">
+        <div class="text-center text-gray-500 py-12">
+          <p>Wah, keranjang belanjaanmu kosong!</p>
+          <a :href="asset('index.html')" class="btn-primary inline-block mt-4">Lihat Menu</a>
+        </div>
+      </template>
+
+      <template x-for="item in $store.cart.items" :key="item.id">
+        <div class="mb-4 bg-white sm:w-[80%] w-full rounded-md p-3 shadow">
+          <div class="flex justify-end">
+            <button class="font-semibold text-xs text-red-500"
+              @click="if (confirm('Anda yakin akan menghapus pesanan?')) $store.cart.remove(item.id)">
+              Hapus
+            </button>
+          </div>
+          <div class="flex flex-row gap-4 items-start">
+            <img class="w-[81px] h-[84px] rounded-xl object-cover" :src="asset('images/' + item.foto)" alt="">
+            <div class="flex flex-col flex-1">
+              <p class="text-sm" x-text="item.kopi_nama"></p>
+              <p x-show="item.jenis_nama" class="text-xs text-secondary" x-text="'Jenis Kopi - ' + item.jenis_nama"></p>
+              <p class="font-bold text-xs mt-1" x-text="formatRupiah(item.subtotal)"></p>
+              <div class="flex items-center mt-2">
+                <button @click="$store.cart.setQuantity(item.id, item.quantity - 1)"
+                  class="bg-primary text-secondary text-sm font-medium px-[10px] py-1 rounded-3xl">-</button>
+                <input :value="item.quantity" readonly class="text-xs font-medium w-10 h-8 text-center bg-transparent border-none">
+                <button @click="$store.cart.setQuantity(item.id, item.quantity + 1)"
+                  class="bg-secondary text-primary text-sm font-medium px-[10px] py-1 rounded-3xl">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="$store.cart.items.length > 0">
+        <div class="sm:w-[80%] w-full">
+          <div class="bg-white rounded-md p-3 mb-4 flex justify-between text-sm font-semibold">
+            <span>Total</span>
+            <span x-text="formatRupiah($store.cart.total)"></span>
+          </div>
+          <a :href="asset('checkout.html')" class="btn-primary block text-center w-full">Checkout</a>
+        </div>
+      </template>
+    </div>
+  </main>
+</body>
+</html>

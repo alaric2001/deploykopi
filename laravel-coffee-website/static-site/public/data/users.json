@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name_user": "Alaric Rasendriya Aniko",
+    "role": "pemilik",
+    "email": "alaric@mail.com",
+    "user_jenis_kelamin": "Laki-Laki",
+    "user_foto": "4x6 enhance.png",
+    "no_hp": "081234567890"
+  },
+  {
+    "id": 2,
+    "name_user": "Seeder",
+    "role": "admin",
+    "email": "seeder@mail.com",
+    "user_jenis_kelamin": "Laki-Laki",
+    "user_foto": "Alaric_small.jpg",
+    "no_hp": "081298765432"
+  },
+  {
+    "id": 3,
+    "name_user": "Alaric Rasendriya",
+    "role": "user",
+    "email": "al@mail.com",
+    "user_jenis_kelamin": "Laki-Laki",
+    "user_foto": "202022310055_Non Formal.png",
+    "no_hp": "081345678901"
+  },
+  {
+    "id": 4,
+    "name_user": "Rasendriya Aniko",
+    "role": "user",
+    "email": "rasen@mail.com",
+    "user_jenis_kelamin": "Laki-Laki",
+    "user_foto": "202022310055_Non Formal.png",
+    "no_hp": "081456789012"
+  },
+  {
+    "id": 5,
+    "name_user": "Alaric Aniko",
+    "role": "user",
+    "email": "aniko@mail.com",
+    "user_jenis_kelamin": "Laki-Laki",
+    "user_foto": "202022310055_Non Formal.png",
+    "no_hp": "081567890123"
+  },
+  {
+    "id": 7,
+    "name_user": "Alaric",
+    "role": "user",
+    "email": "al@mail.com",
+    "user_jenis_kelamin": "Laki-Laki",
+    "user_foto": "202022310055_Non Formal.png",
+    "no_hp": "081789012345"
+  }
+]
