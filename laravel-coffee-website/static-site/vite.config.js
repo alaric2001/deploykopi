@@ -4,7 +4,7 @@ import { resolve } from 'path';
 export default defineConfig(({ mode }) => {
   // Dev: base '/' so localhost:5173/ works and HMR WebSocket connects correctly.
   // Build: use DEPLOY_BASE (set by CI for GitHub Pages) or fallback to repo name.
-  const base = process.env.DEPLOY_BASE || (mode === 'development' ? '/' : '/laravel-coffee-website/');
+  const base = process.env.DEPLOY_BASE || (mode === 'development' ? '/' : '/deploykopi/');
 
   return {
     base,

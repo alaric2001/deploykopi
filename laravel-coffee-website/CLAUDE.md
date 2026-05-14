@@ -32,7 +32,7 @@ npm run preview  # preview hasil build
 
 Push ke branch `main` atau `dev-porto` — GitHub Actions (`.github/workflows/deploy.yml`) otomatis build dan deploy. Pastikan **Settings → Pages → Source: GitHub Actions** sudah diaktifkan di repo.
 
-URL hasil deploy: `https://alaric2001.github.io/laravel-coffee-website/`
+URL hasil deploy: `https://alaric2001.github.io/deploykopi/`
 
 Env var `DEPLOY_BASE` di workflow mengontrol base path. Saat dev lokal, base otomatis `/`; saat build CI, base menjadi `/<nama-repo>/`.
 
