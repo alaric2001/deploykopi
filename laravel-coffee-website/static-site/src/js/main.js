@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
 import { registerStores } from './store.js';
-import { mountNavUser, mountSidebarAdmin } from './layout.js';
+import { mountNavUser, mountSidebarAdmin, mountDocButton } from './layout.js';
 import { asset, formatRupiah, formatTanggal, hargaFinal, isOutOfStock, qs } from './util.js';
 import '../css/main.css';
 
@@ -15,6 +15,8 @@ window.qs = qs;
 // Layout helpers
 window.mountNavUser = mountNavUser;
 window.mountSidebarAdmin = mountSidebarAdmin;
+
+mountDocButton(); // inject sebelum Alpine.start() agar Alpine scan sekaligus
 
 registerStores(Alpine);
 
