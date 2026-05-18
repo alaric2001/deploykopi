@@ -3,15 +3,46 @@
   "live_demo": "https://alaric2001.github.io/deploykopi/",
   "author": "alaric2001",
   "tech_stack": [
-    { "name": "Laravel 10",     "bg": "#fee2e2", "text": "#991b1b" },
-    { "name": "PHP 8.2",        "bg": "#f3e8ff", "text": "#6b21a8" },
-    { "name": "MySQL",          "bg": "#dbeafe", "text": "#1e40af" },
-    { "name": "TailwindCSS",    "bg": "#cffafe", "text": "#155e75" },
-    { "name": "AlpineJS",       "bg": "#e0f2fe", "text": "#075985" },
-    { "name": "Vite",           "bg": "#fef9c3", "text": "#854d0e" },
-    { "name": "Midtrans",       "bg": "#dcfce7", "text": "#166534" },
-    { "name": "PWA",            "bg": "#ede9fe", "text": "#4c1d95" },
-    { "name": "GitHub Pages",   "bg": "#f1f5f9", "text": "#1e293b" }
+    {
+      "name": "Laravel 10",
+      "bg": "#fee2e2",
+      "text": "#991b1b"
+    },
+    {
+      "name": "PHP 8.2",
+      "bg": "#f3e8ff",
+      "text": "#6b21a8"
+    },
+    {
+      "name": "MySQL",
+      "bg": "#dbeafe",
+      "text": "#1e40af"
+    },
+    {
+      "name": "TailwindCSS",
+      "bg": "#cffafe",
+      "text": "#155e75"
+    },
+    {
+      "name": "AlpineJS",
+      "bg": "#e0f2fe",
+      "text": "#075985"
+    },
+    {
+      "name": "Vite",
+      "bg": "#fef9c3",
+      "text": "#854d0e"
+    },
+    {
+      "name": "PWA",
+      "bg": "#ede9fe",
+      "text": "#4c1d95"
+    },
+    {
+      "name": "GitHub Pages",
+      "bg": "#f1f5f9",
+      "text": "#1e293b"
+    }
   ],
   "flow": [
     {
@@ -27,7 +58,7 @@
       "desc": "Pilih Delivery/Takeaway, pilih alamat pengiriman, ongkir dihitung otomatis per kecamatan."
     },
     {
-      "title": "Pembayaran (Midtrans)",
+      "title": "Pembayaran",
       "desc": "Upload bukti transfer ke QRIS atau rekening bank. Gambar dikompresi otomatis sebelum disimpan."
     },
     {
