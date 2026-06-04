@@ -1,2 +1,0 @@
-# deploykopi
-Test free deploy
