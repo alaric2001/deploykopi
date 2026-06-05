@@ -21,7 +21,7 @@
 
 DeployKopi adalah aplikasi e-commerce kedai kopi yang dibangun dengan **dua codebase paralel** — satu backend penuh berbasis Laravel, dan satu frontend statis yang berjalan 100% di browser tanpa server.
 
-Proyek ini menunjukkan kemampuan membangun sistem e-commerce end-to-end: dari desain database relasional, sistem autentikasi berbasis role, alur transaksi dengan payment gateway, hingga otomasi deployment ke GitHub Pages via CI/CD.
+Proyek ini menunjukkan kemampuan membangun sistem e-commerce end-to-end: dari desain database relasional, sistem autentikasi berbasis role, alur transaksi dengan pembayaran manual (QRIS & transfer bank), hingga otomasi deployment ke GitHub Pages via CI/CD.
 
 ---
 
@@ -29,7 +29,7 @@ Proyek ini menunjukkan kemampuan membangun sistem e-commerce end-to-end: dari de
 
 | Layer | Teknologi |
 |---|---|
-| Backend | PHP 8, Laravel 11, Eloquent ORM, Midtrans |
+| Backend | PHP 8, Laravel 11, Eloquent ORM |
 | Frontend (static) | Alpine.js 3, Tailwind CSS 3, Vite 5 |
 | Database | MySQL |
 | CI/CD | GitHub Actions |
@@ -43,7 +43,7 @@ Proyek ini menunjukkan kemampuan membangun sistem e-commerce end-to-end: dari de
 - Browsing menu kopi dengan filter dan detail produk
 - Keranjang belanja persisten (LocalStorage)
 - Checkout dengan pilihan alamat pengiriman
-- Integrasi payment gateway **Midtrans**
+- Pembayaran manual via QRIS & transfer bank
 - Upload bukti pembayaran (dengan kompresi gambar via Canvas API)
 - Riwayat transaksi dan detail order
 
@@ -141,7 +141,7 @@ jobs:
 
 ## Laravel App
 
-Backend penuh dengan autentikasi session, middleware berbasis role, dan integrasi Midtrans.
+Backend penuh dengan autentikasi session, middleware berbasis role, dan sistem pembayaran manual.
 
 ### Cara Menjalankan Lokal
 
@@ -160,14 +160,6 @@ php artisan serve        # terminal 1
 npm run dev              # terminal 2
 ```
 
-### Konfigurasi Midtrans (opsional)
-
-```env
-MIDTRANS_MERCHANT_ID=your_merchant_id
-MIDTRANS_CLIENT_KEY=your_client_key
-MIDTRANS_SERVER_KEY=your_server_key
-```
-
 ### Relasi Database
 
 ```
@@ -183,7 +175,7 @@ User ──< Transaksi
 ### Alur Pembelian
 
 ```
-Pilih kopi → Tambah ke cart → Pilih alamat → Buat order → Checkout Midtrans → Upload bukti → Konfirmasi admin
+Pilih kopi → Tambah ke cart → Pilih alamat → Buat order → Pilih metode bayar (QRIS/Transfer) → Upload bukti → Konfirmasi admin
 ```
 
 ---
@@ -196,7 +188,7 @@ Pilih kopi → Tambah ke cart → Pilih alamat → Buat order → Checkout Midtr
 - **Dynamic base URL** — satu config Vite untuk lokal (`/`) dan GitHub Pages (`/deploykopi/`)
 - **Multi-page app** dengan Rollup multi-entry (bukan SPA, tapi tetap di-bundle Vite)
 - **Role-based access control** di Laravel via custom middleware
-- **Payment gateway** Midtrans terintegrasi di backend
+- **Pembayaran manual** via QRIS & transfer bank dengan konfirmasi admin
 
 ---
 
