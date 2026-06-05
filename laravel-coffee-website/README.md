@@ -1,6 +1,6 @@
 <div align="center">
 
-# ☕ DeployKopi
+# ☕ Seteguk Kopi
 
 **Full-stack coffee shop e-commerce — Laravel backend + static frontend deployed to GitHub Pages**
 
